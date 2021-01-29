@@ -1,6 +1,6 @@
 ---
 title: "Assignment2"
-author: "Yifan Yin"
+author: "Yifan Yin, Aditi Nagaraj Nallan"
 date: "26/01/2021"
 output:
   html_document:
@@ -223,11 +223,13 @@ Normally we would use a job scheduler to accomplish these tasks, but our server 
 Now run the following command, where you should replace <taskfile> with the name of your file. Note that you may need to run `chmod +x runTheseJobsSerially.sh` to give the script file execute permissions.
   
 ```{bash, eval=FALSE}
-./runTheseJobsSerially.sh echo <taskfile>
+./runTheseJobsSerially.sh echo pipeline.txt
 #?# what happened? Enter your answer below - 1 pt
-
 # my answer
-nothing happened?
+The results returned the sample ID and the name of input datasets
+
+# output
+iPSC_input  input_iPSC_SRA66_subset_1.fastq.gz  input_iPSC_SRA66_subset_2.fastq.gz
 ```
 
 ### c. Your first pipeline
@@ -262,7 +264,7 @@ fi
 Now run the following:
 ```{bash, eval=FALSE}
 ## Run this with <taskfile> replaced with the name of your task file.
-./runTheseJobsSerially.sh ./fastqToFilteredBam.sh <taskfile>
+./runTheseJobsSerially.sh ./fastqToFilteredBam.sh pipeline.txt
 #?# What happened? Enter your answer below - 1 pt
 
 # my answer
@@ -309,7 +311,7 @@ Note that in the script provided, fastqc is not actually run, so you will have t
 
 ```{bash, eval=FALSE}
 ## Test the script by running this, with your modified pipeline script in place of fastqToFilteredBam.sh
-./runTheseJobsSerially.sh ./fastqToFilteredBam.sh <taskfile>
+./runTheseJobsSerially.sh ./fastqToFilteredBam.sh pipeline.txt
 ```
 
 When you are done, enter the code for your pipeline in the space provided below - 10 pts
@@ -359,14 +361,11 @@ then
         # filter unique reads
         echo filtering unique reads
         
-        sambamba view -h -f bam -F "[XS] == null and not unmapped and not duplicate" input_data.sorted.bam > unique_read.bam
+        sambamba view -h -f bam -F "[XS] == null and not unmapped and not duplicate" /home/yyin/input_data.sorted.bam > /home/yyin/unique_read.bam
         
         echo filtering done
         touch $logDir/$sample.fastqc.done #create the file that we were looking for at the beginning of this if statement so that this same code is not run next time
 else # $logDir/$sample.fastqc.done was not missing
         echo Already performed fastqc of $sample
 fi
-
-
-
 ```
